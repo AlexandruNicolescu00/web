@@ -4,7 +4,7 @@ info:
   version: "0.0.1"
   title: "API Ristorante"
 
-host: "petstore.swagger.io"
+host: "tw.cs.unbo.it"
 basePath: "/v1"
 paths:
   /menu/:
