@@ -1,0 +1,105 @@
+swagger: "2.0"
+info:
+  description: "API Piattaforma di giochi"
+  version: "0.0.1"
+  title: "API Piattaforma di giochi"
+
+host: "tw.cs.unbo.it"
+basePath: "/v1"
+paths:
+  /giochi/:
+    # 1. ottenere l’elenco di tutti i giochi di una data categoria
+    get:
+      parameters:
+        - name: categoria
+          in: query
+          required: true
+          type: string
+          enum:
+            - Shooter
+            - Adventure
+            - Puzzle
+            - Sport
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Gioco"
+        400:
+          description: "Error"
+    # 3. aggiungere un insieme di giochi e le relative informazioni; è possibile
+    #    quindi aggiungere anche più di un gioco con un’unica richiesta
+    post:
+      parameters:
+        - name: giochi
+          in: body
+          required: true
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Gioco"
+      responses:
+        200:
+          description: "OK"
+        400:
+          description: "Error"
+  /giochi/{idGioco}:
+    # 2. modificare il numero minimo e massimo di giocatori in un gioco
+    post:
+      parameters:
+        - name: idGioco
+          in: path
+          required: true
+          type: integer
+          format: int64
+        - name: min_max_p
+          in: body
+          required: true
+          schema: 
+            $ref: "#/definitions/NumGiocatori"
+      responses:
+        200:
+          description: "OK"
+        400:
+          description: "Error"
+schemes:
+- "https"
+- "http"
+
+definitions:
+  NumGiocatori:
+    type: object
+    required:
+      - minP
+      - maxP
+    properties:
+      min:
+        type: integer
+        format: int64
+      max:
+        type: integer
+        format: int64
+  Gioco:
+    type: object
+    required:
+      - id
+      - nome
+      - categoria
+      - min_max_p
+    properties:
+      id:
+        type: integer
+        format: int64
+      nome:
+        type: string
+      categoria:
+        type: string
+        enum:
+          - Shooter
+          - Adventure
+          - Puzzle
+          - Sport
+      min_max_p:
+        $ref: "#/definitions/NumGiocatori"
